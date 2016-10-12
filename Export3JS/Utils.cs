@@ -106,10 +106,10 @@ namespace Export3JS {
         // This doesn't affect the copied texture files, it only affects the texture url in the output .json
         public static string copyTexture(string assetPath, string destination, bool renameToPng = false) {
             string projectPath = Directory.GetCurrentDirectory() + '/';
-            string texturesDir = destination + "textures";
+            string texturesDir = destination + Path.GetDirectoryName(assetPath);
             string filename = Path.GetFileName(assetPath);
             Directory.CreateDirectory(texturesDir);
-            string url = "textures/" + filename;
+            string url = assetPath;
             if (!File.Exists(destination + url)) {
                 try {
                     File.Copy(projectPath + assetPath, destination + url);
@@ -120,11 +120,14 @@ namespace Export3JS {
                 }
             }
 
-            // Url encode the filename in texture url
-            string escapedFilename = WWW.EscapeURL(filename);
+            // Url encode the texture url
+            string escapedFilePath = WWW.EscapeURL(url);
             // The Unity's escapeurl method uses + instead of %20 for spaces, to increase compatibility replace the +'s
             // with %20.
-            url = "textures/" + escapedFilename.Replace("+", "%20");
+            url = escapedFilePath.Replace("+", "%20");
+            // Also since we just want to encode the folder and file names, and not the whole path; replace the
+            // %2f's with /.
+            url = url.Replace("%2f", "/");
             return (renameToPng) ? url + ".png" : url;
         }
     }
