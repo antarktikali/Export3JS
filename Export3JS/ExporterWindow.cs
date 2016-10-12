@@ -30,7 +30,7 @@ namespace Export3JS {
             options.castShadows = false;
             options.tags = new string[0];
             selectTags = false;
-            options.writePNGTextures = false;
+            options.appendPNGExtensionToTextureURLs = false;
             options.minifyJSON = true;
         }
 
@@ -66,7 +66,11 @@ namespace Export3JS {
             options.castShadows = EditorGUILayout.Toggle("Cast shadows", options.castShadows);
             EditorGUILayout.Space();
             GUILayout.Label("Other settings", EditorStyles.boldLabel);
-            options.writePNGTextures = EditorGUILayout.Toggle(new GUIContent("Convert textures", "Convert unsuported textures to PNG"), options.writePNGTextures);
+            options.appendPNGExtensionToTextureURLs = EditorGUILayout.Toggle(new GUIContent("Append .png to" +
+                " Texture URL's", "In the output .json file, append .png to every texture URL. This option is to be" +
+                " used together with an external image converter such as imagemagick to manually convert the textures" +
+                " to png format. Note that the original file extension is not removed from the URL."),
+                options.appendPNGExtensionToTextureURLs);
             options.minifyJSON = EditorGUILayout.Toggle("Minify JSON", options.minifyJSON);
             EditorGUILayout.Space();
             GUILayout.Label("Specify output location:", EditorStyles.boldLabel);

@@ -101,7 +101,10 @@ namespace Export3JS {
             else return false;
         }
 
-        public static string copyTexture(string assetPath, string destination) {
+        // renameToPng flag appends a .png extension to the texture name. This is used together with
+        // an external image converter such as imagemagick to later convert all of the texture files to png.
+        // This doesn't affect the copied texture files, it only affects the texture url in the output .json
+        public static string copyTexture(string assetPath, string destination, bool renameToPng = false) {
             string projectPath = Directory.GetCurrentDirectory() + '/';
             string texturesDir = destination + "textures";
             string filename = Path.GetFileName(assetPath);
@@ -116,40 +119,7 @@ namespace Export3JS {
                     url = "";
                 }
             }
-            return url;
+            return (renameToPng) ? url + ".png" : url;
         }
-
-		public static string writeTextureAsPNG(Texture sourceTexture, string assetPath, string destination) {
-			string texturesDir = destination + "textures";
-            // The original file extension is not removed in order to prevent conflicts if there are textures with the
-            // same name but different file extension.
-			string filename = Path.GetFileName(assetPath) + ".png";
-			Directory.CreateDirectory(texturesDir);
-			string url = "textures/" + filename;
-
-			if (!File.Exists(destination + url)) {
-				Texture2D texture = (Texture2D) sourceTexture;
-				Color[] colors;
-				try {
-					colors = texture.GetPixels();
-				} catch( UnityException e ) {
-					Debug.LogError("Source texture is not readable. You have to mark the texture as readable from the" +
-						" texture import settings: " + e.ToString());
-					return null;
-				}
-				Texture2D convertedTexture = new Texture2D(texture.width, texture.height, TextureFormat.ARGB32, false);
-				convertedTexture.SetPixels(colors);
-				byte[] bytes = convertedTexture.EncodeToPNG();
-				FileStream f = File.Create(destination + url);
-				try {
-					f.Write(bytes, 0, bytes.Length);
-					f.Close();
-				} catch(IOException exception) {
-					Debug.Log("Error while writing PNG texture: " + exception.Message);
-					url = "";
-				}
-			}
-			return url;
-		}
     }
 }

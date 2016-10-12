@@ -15,7 +15,7 @@ namespace Export3JS {
         public bool exportMeshes;
         public bool exportDisabled;
         public bool castShadows;
-        public bool writePNGTextures;
+        public bool appendPNGExtensionToTextureURLs;
         public string[] tags;
         public bool minifyJSON;
     }
@@ -555,12 +555,7 @@ namespace Export3JS {
             Image3JS jsImg = new Image3JS();
             // Copying the texture file
             string relativePath = AssetDatabase.GetAssetPath(tex);
-			string url = null;
-            if (options.writePNGTextures && !Utils.isFormatSupported(relativePath)) {
-                url = Utils.writeTextureAsPNG(tex, relativePath, options.dir);
-            } else {
-                url = Utils.copyTexture(relativePath, options.dir);
-            }
+            string url = Utils.copyTexture(relativePath, options.dir, options.appendPNGExtensionToTextureURLs);
             if (!string.IsNullOrEmpty(url)) {
                 jsImg.url = url;
                 jsText.image = jsImg.uuid;
