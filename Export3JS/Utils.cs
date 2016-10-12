@@ -119,6 +119,12 @@ namespace Export3JS {
                     url = "";
                 }
             }
+
+            // Url encode the filename in texture url
+            string escapedFilename = WWW.EscapeURL(filename);
+            // The Unity's escapeurl method uses + instead of %20 for spaces, to increase compatibility replace the +'s
+            // with %20.
+            url = "textures/" + escapedFilename.Replace("+", "%20");
             return (renameToPng) ? url + ".png" : url;
         }
     }
