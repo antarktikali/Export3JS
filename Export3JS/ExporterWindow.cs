@@ -30,6 +30,7 @@ namespace Export3JS {
             options.castShadows = false;
             options.tags = new string[0];
             selectTags = false;
+            options.forceDoubleSidedMaterials = false;
             options.appendPNGExtensionToTextureURLs = false;
             options.minifyJSON = true;
         }
@@ -66,6 +67,9 @@ namespace Export3JS {
             options.castShadows = EditorGUILayout.Toggle("Cast shadows", options.castShadows);
             EditorGUILayout.Space();
             GUILayout.Label("Other settings", EditorStyles.boldLabel);
+            options.forceDoubleSidedMaterials = EditorGUILayout.Toggle(new GUIContent("Force double sided materials",
+                "Use this if you are stuck with using a model that has faces with wrong normals"),
+                options.forceDoubleSidedMaterials);
             options.appendPNGExtensionToTextureURLs = EditorGUILayout.Toggle(new GUIContent("Append .png to" +
                 " Texture URL's", "In the output .json file, append .png to every texture URL. This option is to be" +
                 " used together with an external image converter such as imagemagick to manually convert the textures" +

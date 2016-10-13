@@ -15,6 +15,7 @@ namespace Export3JS {
         public bool exportMeshes;
         public bool exportDisabled;
         public bool castShadows;
+        public bool forceDoubleSidedMaterials;
         public bool appendPNGExtensionToTextureURLs;
         public string[] tags;
         public bool minifyJSON;
@@ -504,6 +505,10 @@ namespace Export3JS {
             // (At the time of version 5.4.0f3)
             matJS.transparent = (mat.GetFloat("_Mode") != 0); 
             matJS.wireframe = false;
+
+            if (options.forceDoubleSidedMaterials) {
+                matJS.side = MaterialSide.DoubleSide;
+            }
 
             content.materials.Add(matJS);
             materials.Add(matJS.uuid, mat);
